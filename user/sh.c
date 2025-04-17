@@ -72,13 +72,48 @@ runcmd(struct cmd *cmd)
   default:
     panic("runcmd");
 
-  case EXEC:
-    ecmd = (struct execcmd*)cmd;
-    if(ecmd->argv[0] == 0)
-      exit(1);
-    exec(ecmd->argv[0], ecmd->argv);
-    fprintf(2, "exec %s failed\n", ecmd->argv[0]);
-    break;
+ case EXEC:
+  ecmd = (struct execcmd*)cmd;
+  if(ecmd->argv[0] == 0)
+    exit(1);
+
+ 
+if(ecmd->argv[0] && strcmp(ecmd->argv[0], "!") == 0){
+  char buf[1024] = {0};
+  int  len = 0;
+  for(int i = 1; ecmd->argv[i] && len < (int)sizeof(buf)-1; i++){
+    if(i != 1) buf[len++] = ' ';
+    int l = strlen(ecmd->argv[i]);
+    if(len + l >= (int)sizeof(buf)-1) l = sizeof(buf)-1-len;
+    memmove(buf + len, ecmd->argv[i], l);
+    len += l;
+  }
+  buf[len] = 0;
+
+  if(len > 512){
+    printf("Message too long\n");
+    exit(0);
+  }
+
+
+  for(int i = 0; i < len; i++){
+    if(i+1 < len && buf[i] == 'o' && buf[i+1] == 's'){
+      const char *blue = "\033[34mos\033[0m";
+      write(1, blue, strlen(blue));
+      i++;                     // skip the 's'
+    } else {
+      write(1, &buf[i], 1);    // single byte
+    }
+  }
+  write(1, "\n", 1);
+  exit(0);
+}
+
+
+  exec(ecmd->argv[0], ecmd->argv);
+  fprintf(2, "exec %s failed\n", ecmd->argv[0]);
+  break;
+
 
   case REDIR:
     rcmd = (struct redircmd*)cmd;
