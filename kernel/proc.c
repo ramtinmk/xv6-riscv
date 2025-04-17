@@ -5,6 +5,7 @@
 #include "spinlock.h"
 #include "proc.h"
 #include "defs.h"
+#include "custom_logger.h"
 
 struct cpu cpus[NCPU];
 
@@ -274,6 +275,13 @@ growproc(int n)
   return 0;
 }
 
+
+int
+trigger(void)
+{
+  log_message(3,"This is a log to test a new xv6 system call");
+  return 0;
+}
 // Create a new process, copying the parent.
 // Sets up child kernel stack to return as if from fork() system call.
 int
