@@ -5,6 +5,7 @@
 #include "memlayout.h"
 #include "spinlock.h"
 #include "proc.h"
+#include "custom_logger.h" 
 
 uint64
 sys_exit(void)
@@ -92,8 +93,9 @@ sys_uptime(void)
   return xticks;
 }
 
-uint64 
+uint64
 sys_trigger(void)
 {
-  log_info()
+  
+  return trigger();
 }
