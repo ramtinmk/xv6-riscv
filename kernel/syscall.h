@@ -20,8 +20,4 @@
 #define SYS_link   19
 #define SYS_mkdir  20
 #define SYS_close  21
-<<<<<<< HEAD
 #define SYS_trigger 22
-=======
-#define SYS_trigger 22
->>>>>>> 317630dbb6de03b76ce0fba5f8baa099a2bd1476
