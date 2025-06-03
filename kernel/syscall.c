@@ -101,6 +101,10 @@ extern uint64 sys_unlink(void);
 extern uint64 sys_link(void);
 extern uint64 sys_mkdir(void);
 extern uint64 sys_close(void);
+extern uint64 sys_thread(void); 
+extern uint64 sys_jointhread(void); 
+ 
+
 
 // An array mapping syscall numbers from syscall.h
 // to the function that handles the system call.
@@ -126,6 +130,8 @@ static uint64 (*syscalls[])(void) = {
 [SYS_link]    sys_link,
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
+[SYS_thread]      sys_thread, 
+[SYS_jointhread]  sys_jointhread, 
 };
 
 void
@@ -133,6 +139,8 @@ syscall(void)
 {
   int num;
   struct proc *p = myproc();
+  struct thread *oldt = p->current_thread; 
+  uint64 ret;
 
   num = p->trapframe->a7;
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
@@ -144,4 +152,15 @@ syscall(void)
             p->pid, p->name, num);
     p->trapframe->a0 = -1;
   }
+  
+  struct thread *newt = p->current_thread; 
+   if (oldt != newt) { 
+       if (!oldt) 
+           oldt = &p->threads[0]; 
+       oldt->trapframe->a0 = ret; 
+   } 
+   if (oldt == newt || p->current_thread == oldt) { 
+       p->trapframe->a0 = ret; 
+   } 
+
 }
