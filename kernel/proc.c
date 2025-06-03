@@ -721,7 +721,7 @@ allocthread(uint64 start_thread, uint64 stack_address, uint64 arg)
             *t->trapframe = *p->trapframe; 
             t->trapframe->sp = stack_address; 
             t->trapframe->a0 = arg; 
-            t->trapframe->ra = -1; 
+            t->trapframe->ra = -1;
             t->trapframe->epc = (uint64) start_thread; 
             return t; 
         } 
