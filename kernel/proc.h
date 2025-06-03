@@ -1,3 +1,23 @@
+
+// proc.h: Process definitions for xv6-riscv kernel.
+
+enum threadstate {
+    THREAD_UNUSED,   // Thread is unused
+    THREAD_SLEEPING, // Thread is sleeping
+    THREAD_RUNNABLE, // Thread is runnable
+    THREAD_RUNNING,  // Thread is currently running
+    THREAD_JOINED   // Thread has finished execution and is waiting to be cleaned up
+};
+
+struct thread { 
+    enum threadstate state;        
+    struct trapframe *trapframe;    
+    uint id;                       
+    uint join;                     
+    int sleep_n;                   
+    uint sleep_tick0;             
+};
+
 // Saved registers for kernel context switches.
 struct context {
   uint64 ra;
@@ -104,4 +124,7 @@ struct proc {
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
+
+  struct thread threads[NTHREAD];      // Threads in the proces
+  struct thread *current_thread;      // Threads in the process
 };
