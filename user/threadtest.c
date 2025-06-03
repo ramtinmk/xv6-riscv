@@ -31,4 +31,6 @@ int main(int argc, char *argv[]) {
     jointhread(tb); 
     jointhread(tc); 
     printf("DONE\n"); 
+
+    return 0;
 } 

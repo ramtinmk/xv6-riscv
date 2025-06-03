@@ -18,6 +18,8 @@ struct thread {
     uint sleep_tick0;             
 };
 
+
+
 // Saved registers for kernel context switches.
 struct context {
   uint64 ra;
@@ -128,3 +130,15 @@ struct proc {
   struct thread threads[NTHREAD];      // Threads in the proces
   struct thread *current_thread;      // Threads in the process
 };
+
+
+int thread_schd(struct proc *p);
+struct thread *allocthread(uint64 start_thread, uint64 stack_address, uint64 arg);
+void freethread(struct thread *t);
+void exitthread();
+int jointhread(uint join_id);
+void sleepthread(int n, uint ticks0);
+
+struct thread * initthread(struct proc *p);
+
+int thread(void *start_thread, int *stack_address, void *arg);

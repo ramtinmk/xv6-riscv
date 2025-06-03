@@ -871,4 +871,12 @@ thread_schd(struct proc *p) {
 }
 
 
+int thread(void *start_thread, int *stack_address, void *arg)
+{
+  
+  struct thread *t = allocthread((uint64) start_thread, (uint64)stack_address,(uint64) arg); 
+  return t ? t->id : 0; 
+}
+
+
 

@@ -48,27 +48,6 @@ sys_sbrk(void)
   return addr;
 }
 
-uint64
-sys_sleep(void)
-{
-  int n;
-  uint ticks0;
-
-  argint(0, &n);
-  if(n < 0)
-    n = 0;
-  acquire(&tickslock);
-  ticks0 = ticks;
-  while(ticks - ticks0 < n){
-    if(killed(myproc())){
-      release(&tickslock);
-      return -1;
-    }
-    sleep(&ticks, &tickslock);
-  }
-  release(&tickslock);
-  return 0;
-}
 
 uint64
 sys_kill(void)
@@ -97,8 +76,9 @@ uint64 sys_thread(void) {
     argaddr(0, &start_thread); 
     argaddr(1, &stack_address); 
     argaddr(2, &arg); 
-    struct thread *t = allocthread(start_thread, stack_address, arg); 
-    return t ? t->id : 0; 
+
+    return thread((void *)start_thread,(int *) stack_address,(void *)arg);
+
 }
 uint64 sys_jointhread(void) { 
     int id; 
