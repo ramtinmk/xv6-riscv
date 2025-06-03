@@ -101,6 +101,8 @@ extern uint64 sys_unlink(void);
 extern uint64 sys_link(void);
 extern uint64 sys_mkdir(void);
 extern uint64 sys_close(void);
+
+
 extern uint64 sys_thread(void); 
 extern uint64 sys_jointhread(void); 
  
@@ -152,7 +154,7 @@ syscall(void)
             p->pid, p->name, num);
     p->trapframe->a0 = -1;
   }
-  
+
   struct thread *newt = p->current_thread; 
    if (oldt != newt) { 
        if (!oldt) 
