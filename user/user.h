@@ -1,5 +1,7 @@
 struct stat;
 
+
+
 // system calls
 int fork(void);
 int exit(int) __attribute__((noreturn));
@@ -25,7 +27,7 @@ int uptime(void);
 
 //threads
 int thread(void *start_thread, int *stack_address, void *arg); 
-int jointhread(int id);
+int jointhread(uint join_id);
 
 
 // ulib.c
